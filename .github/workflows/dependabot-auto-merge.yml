@@ -1,0 +1,58 @@
+name: Dependabot Auto-Merge
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  auto-merge:
+    runs-on: ubuntu-latest
+    if: github.actor == 'dependabot[bot]'
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Auto-merge Dependabot PRs for patch-level updates
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const pr = context.payload.pull_request;
+            
+            // Check if it's a Dependabot PR
+            if (pr.user.login !== 'dependabot[bot]') {
+              console.log('This PR is not from Dependabot, skipping auto-merge.');
+              return;
+            }
+            
+            // Extract PR title and check if it's a patch update
+            const title = pr.title;
+            const isPatchUpdate = title.includes('patch') || 
+                                (/bump .* from ([\d\.]+) to ([\d\.]+)/.test(title) && 
+                                 title.match(/bump .* from ([\d\.]+) to ([\d\.]+)/)[1].split('.')[0] === 
+                                 title.match(/bump .* from ([\d\.]+) to ([\d\.]+)/)[2].split('.')[0] && 
+                                 title.match(/bump .* from ([\d\.]+) to ([\d\.]+)/)[1].split('.')[1] === 
+                                 title.match(/bump .* from ([\d\.]+) to ([\d\.]+)/)[2].split('.')[1]);
+            
+            if (!isPatchUpdate) {
+              console.log('This is not a patch-level update, skipping auto-merge.');
+              return;
+            }
+            
+            console.log('This is a Dependabot PR with a patch-level update, approving and merging.');
+            
+            // Approve the PR
+            await github.rest.pulls.createReview({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pr.number,
+              event: 'APPROVE'
+            });
+            
+            // Auto-merge the PR
+            await github.rest.pulls.merge({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: pr.number,
+              merge_method: 'squash'
+            });
