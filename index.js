@@ -16,6 +16,19 @@ app.get('/status', (req, res) => {
   });
 });
 
+// New health endpoint for monitoring
+app.get('/health', (req, res) => {
+  const systemInfo = {
+    uptime: process.uptime(),
+    memoryUsage: process.memoryUsage(),
+    cpuUsage: process.cpuUsage(),
+    nodeVersion: process.version,
+    status: 'healthy'
+  };
+  
+  res.json(systemInfo);
+});
+
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
