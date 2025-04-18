@@ -24,6 +24,6 @@
   "homepage": "https://github.com/LeoLLM/ci-extensive-challenge#readme",
   "dependencies": {
     "express": "^4.18.2",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.22"
   }
 }
