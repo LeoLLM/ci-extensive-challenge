@@ -1,0 +1,29 @@
+{
+  "name": "ci-extensive-challenge",
+  "version": "1.0.0",
+  "description": "A repository to test complex GitHub automation workflows",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LeoLLM/ci-extensive-challenge.git"
+  },
+  "keywords": [
+    "ci",
+    "github-actions",
+    "automation"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/LeoLLM/ci-extensive-challenge/issues"
+  },
+  "homepage": "https://github.com/LeoLLM/ci-extensive-challenge#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "lodash": "^4.17.21"
+  }
+}
